@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import PlayPause from "./PlayPause";
 import { playPause, setActiveSong } from "../redux/features/playerSlice";
 
-const SongCard = ({ song, key, isPlaying, activeSong, data }) => {
+const SongCard = ({ song, key, i, isPlaying, activeSong, data }) => {
   const {
     albumOfTrack: {
       coverArt: { sources },
@@ -15,8 +15,14 @@ const SongCard = ({ song, key, isPlaying, activeSong, data }) => {
   } = song;
   const artistId = items[0]?.uri.slice(15);
 
-  const handlePause = () => {};
-  const handlePlay = () => {};
+  const dispatch = useDispatch()
+  const handlePause = () => {
+    dispatch(playPause(false))
+  };
+  const handlePlay = () => {
+    dispatch(setActiveSong({ song, data, i }))
+    dispatch(playPause(true))
+  };
   return (
     <div className=" flex flex-col w-[250px] p-4 bg-white/5 bg-opacity-80 backdrop-blur-sm animate-slideup rounded-lg cursor-pointer">
       <div className=" relative w-full h-56 group ">

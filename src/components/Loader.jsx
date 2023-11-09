@@ -3,7 +3,7 @@ import {loader} from "../assets"
 const Loader = () => (
   <div className=" w-full flex justify-center items-center flex-col">
     <img src={loader} alt="loader" className=" w-32 h-32 object-contain"/>
-    <h1 className=" font-bold text-white mt-2 text-2xl">Loading ....</h1>
+    <h1 className=" font-bold text-white mt-2 text-2xl">Loading Songs...</h1>
   </div>
 );
 

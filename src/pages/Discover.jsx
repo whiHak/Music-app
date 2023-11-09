@@ -2,17 +2,18 @@ import { Error, Loader, SongCard } from "../components";
 import { genres } from "../assets/constants";
 import { useGetTopChartsQuery } from "../redux/services/spotify";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Discover = () => {
-  window.scroll({ top: "0" });
-
+  window.scrollTo({ top: "0"})
   const dispatch = useDispatch();
   const { isPlaying, activeSong } = useSelector((state) => state.player);
 
   const { data, isFetching, error } = useGetTopChartsQuery();
-  if (isFetching) return <Loader title="Loading Songs..." />;
+  
+  if (isFetching) return <Loader />;
   if (error) return <Error />;
-
+  
   const {
     tracks: { items },
   } = data;
@@ -42,13 +43,14 @@ const Discover = () => {
         </select>
       </div>
       <div className=" flex flex-wrap sm:justify-center justify-start gap-8">
-        {items?.map((song) => (
+        {items?.map((song, i) => (
           <SongCard
-            key={song?.data?.id}
+            key={song?.data?.uid?.slice(14)}
+            i={i}
             song={song?.data}
             isPlaying={isPlaying}
             activeSong={activeSong}
-            data={data}
+            data={items}
           />
         ))}
       </div>
