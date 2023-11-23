@@ -1,23 +1,33 @@
 import { Error, Loader, SongCard } from "../components";
 import { genres } from "../assets/constants";
-import { useGetTopChartsQuery } from "../redux/services/spotify";
+import { useGetSearchQuery } from "../redux/services/spotify";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { setCurrentSongs } from "../redux/features/playerSlice";
 
 const Discover = () => {
-  window.scrollTo({ top: "0"})
   const dispatch = useDispatch();
-  const { isPlaying, activeSong } = useSelector((state) => state.player);
+  const { isPlaying, activeSong, currentSongs } = useSelector(
+    (state) => state.player
+  );
+  const [genre, setGenre] = useState("Pop");
 
-  const { data, isFetching, error } = useGetTopChartsQuery();
-  
+  const { data, isFetching, error } = useGetSearchQuery(genre);
+  useEffect(() => {
+    if (data && !isFetching && !error) {
+      dispatch(setCurrentSongs(data)); // Assuming the data structure matches the hits
+    }
+  }, [data, isFetching, error, dispatch]);
+
   if (isFetching) return <Loader />;
   if (error) return <Error />;
-  
+
+  console.log(data);
+
   const {
     tracks: { items },
   } = data;
-  console.log(items);
+  // console.log(items);
   const title = "Pop";
 
   return (
@@ -27,8 +37,10 @@ const Discover = () => {
           Discover {title}
         </h2>
         <select
-          onChange={() => {}}
-          value=""
+          onChange={(e) => {
+            setGenre(e.target.value);
+          }}
+          value={genre}
           className=" bg-black outline-none text-gray-300 text-sm sm:mt-0 mt-5 p-3 rounded-lg "
         >
           {genres?.map((item) => (
@@ -42,7 +54,7 @@ const Discover = () => {
           ))}
         </select>
       </div>
-      <div className=" flex flex-wrap sm:justify-center justify-start gap-8">
+      <div className=" flex flex-wrap  xl:justify-start justify-center gap-8">
         {items?.map((song, i) => (
           <SongCard
             key={song?.data?.uid?.slice(14)}
