@@ -5,11 +5,12 @@ import { FreeMode } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
 import { useGetSearchQuery } from "../redux/services/spotify";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import { Link } from "react-router-dom";
 import PlayPause from "./PlayPause";
 import { playPause,setActiveSong } from "../redux/features/playerSlice";
+import TopArtist from "./TopArtist";
 
 const TopCharts = ({
   song,
@@ -26,7 +27,7 @@ const TopCharts = ({
   handlePlay,
 }) => {
   return (
-    <div className=" w-full flex flex-row items-center hover:bg-[#4c426e] py-2 p-4 rounded-lg  cursor-pointer mt-4">
+    <div className=" w-full flex flex-row items-center hover:bg-[#4c426e] py-2 p-4 rounded-lg  cursor-pointer mt-0">
       <div className="w-full flex flex-row items-center ">
         <img src={sources[1].url} alt="song avatar" className=" mr-4" />
         <div className=" flex flex-col truncate ">
@@ -50,15 +51,13 @@ const TopCharts = ({
 
 const TopPlay = () => {
   const dispatch = useDispatch();
-  const { activeSong, isPlaying } = useSelector(
+  const { activeSong, isPlaying, currentSongs } = useSelector(
     (state) => state.player
   );
+  console.log(currentSongs)
   const { data, isFetching, error } = useGetSearchQuery();
 
-  const { tracks } = data || {};
-  const { items } = tracks || {};
-
-  const topPlays = items?.slice(0, 5);
+  const topPlays = currentSongs?.slice(0, 5);
   console.log(topPlays);
 
   const handlePause = () => {
@@ -78,16 +77,16 @@ const TopPlay = () => {
   return (
     <div
       ref={ref}
-      className=" xl:ml-6 ml-0 xl:mb-0 mb-6 flex-1 xl:max-w-[400px] max-w-full flex flex-col"
+      className=" xl:ml-3 ml-0 xl:mb-0 mb-6 flex-1 xl:max-w-[400px] max-w-full flex flex-col"
     >
       <div className=" w-full felx flex-col">
-        <div className=" flex flex-row justify-between items-center">
+        <div className=" flex flex-row justify-between items-center mt-4">
           <h2 className=" text-white text-2xl font-bold">Top Charts</h2>
           <Link to="/top-charts">
             <p className=" text-gray-300 text-base cursor-pointer">See more</p>
           </Link>
         </div>
-        <div className=" w-full flex flex-col gap-1 mt-4">
+        <div className="flex flex-col gap-4 mt-4">
           {topPlays?.map((song, i) => (
             <TopCharts
               key={song.id}
@@ -102,8 +101,8 @@ const TopPlay = () => {
           ))}
         </div>
       </div>
-      {/* <div className=" w-full items-center mt-8 flex flex-col">
-        <div className=" flex flex-row justify-between items-center">
+      <div className=" w-full items-center mt-8 flex flex-col">
+        <div className=" w-full flex flex-row justify-between items-center">
           <h2 className=" text-white text-2xl font-bold">Top Artists</h2>
           <Link to="/top-artists">
             <p className=" text-gray-300 text-base cursor-pointer">See more</p>
@@ -120,17 +119,17 @@ const TopPlay = () => {
         >
           {topPlays?.map((song, indx) => (
             <SwiperSlide
-              key={song.id}
+              key={song.data?.id}
               style={{ width: "25%", height: "auto" }}
               className=" shadow-lg rounded-full animate-slideright"
             >
-              <Link to={`/artist/${song.artists?.items[0].uri}`}>
-                <img src={song.artists?.items[0].name} />
+              <Link to={`/artist/${song.data?.artists?.items[0].uri?.slice(15)}`}>
+                <TopArtist artistsId = {song.data?.artists?.items[0].uri?.slice(15)}/>
               </Link>
             </SwiperSlide>
           ))}
         </Swiper>
-      </div> */}
+      </div>
     </div>
   );
 };
