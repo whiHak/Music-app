@@ -1,19 +1,19 @@
 import React from "react";
 import { useGetArtistQuery } from "../redux/services/spotify";
 
-const TopArtist = ({ artistsId }) => {
+const Artist = ({ artistsId }) => {
   const { data, isFetching, error } = useGetArtistQuery(artistsId);
   console.log();
 
   return (
-    <div>
+    <div className="w-full">
       <img
         src={data?.artists[0]?.images[0]?.url}
-        className=" h-24 w-24 rounded-full mt-4 object-cover"
+        className=" rounded-full mt-4 object-cover w-full"
         alt="artist banner"
       />
     </div>
   );
 };
 
-export default TopArtist;
+export default Artist;

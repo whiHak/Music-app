@@ -10,7 +10,7 @@ import Loader from "./Loader";
 import { Link } from "react-router-dom";
 import PlayPause from "./PlayPause";
 import { playPause,setActiveSong } from "../redux/features/playerSlice";
-import TopArtist from "./TopArtist";
+import Artist from "./Artist";
 
 const TopCharts = ({
   song,
@@ -64,9 +64,11 @@ const TopPlay = () => {
     dispatch(playPause(false));
   };
   const handlePlay = ({ song, i }) => {
-    dispatch(setActiveSong({ song, data, i }));
+    dispatch(setActiveSong({ song, i }));
     dispatch(playPause(true));
   };
+  console.log(isPlaying)
+
 
   const ref = useRef(null);
 
@@ -86,22 +88,22 @@ const TopPlay = () => {
             <p className=" text-gray-300 text-base cursor-pointer">See more</p>
           </Link>
         </div>
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-1 mt-4">
           {topPlays?.map((song, i) => (
             <TopCharts
               key={song.id}
               song={song.data}
               i={i}
-              data={data}
+              data={data?.tracks?.items}
               isPlaying={isPlaying}
               activeSong={activeSong}
               handlePause={handlePause}
-              handlePlay={() => handlePlay({song:song.data}, i)}
+              handlePlay={() => handlePlay({song:song.data},  i)}
             />
           ))}
         </div>
       </div>
-      <div className=" w-full items-center mt-8 flex flex-col">
+      <div className=" w-full items-center mt-4 flex flex-col">
         <div className=" w-full flex flex-row justify-between items-center">
           <h2 className=" text-white text-2xl font-bold">Top Artists</h2>
           <Link to="/top-artists">
@@ -120,11 +122,11 @@ const TopPlay = () => {
           {topPlays?.map((song, indx) => (
             <SwiperSlide
               key={song.data?.id}
-              style={{ width: "25%", height: "auto" }}
+              style={{ width: "20%", height: "auto" }}
               className=" shadow-lg rounded-full animate-slideright"
             >
               <Link to={`/artist/${song.data?.artists?.items[0].uri?.slice(15)}`}>
-                <TopArtist artistsId = {song.data?.artists?.items[0].uri?.slice(15)}/>
+                <Artist artistsId = {song.data?.artists?.items[0].uri?.slice(15)}/>
               </Link>
             </SwiperSlide>
           ))}

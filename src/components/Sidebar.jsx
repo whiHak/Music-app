@@ -31,7 +31,7 @@ const Sidebar = ({ handleClick }) => {
         <img src={logo} alt="logo" className=" w-full h-14 object-contain" />
         <NavLinks />
       </div>
-      <div className=" absolute md:hidden block top-6 right-3">
+      <div className=" absolute md:hidden block top-6 right-3 z-10">
         {mobileMenu ? (
           <RiCloseLine
             className=" w-6 h-6 text-gray-300"

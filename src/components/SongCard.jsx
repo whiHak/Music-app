@@ -14,18 +14,19 @@ const SongCard = ({ song, key, i, isPlaying, activeSong, data }) => {
     artists: { items },
   } = song;
   const artistId = items[0]?.uri.slice(15);
+  const songId = song?.uri.slice(14)
 
   const dispatch = useDispatch()
   const handlePause = () => {
     dispatch(playPause(false))
   };
   const handlePlay = () => {
-    dispatch(setActiveSong({ song, data, i }))
+    dispatch(setActiveSong({ song, i }))
     dispatch(playPause(true))
   };
   return (
     <div className=" flex flex-col w-[230px] p-4 bg-white/5 bg-opacity-80 backdrop-blur-sm animate-slideup rounded-lg cursor-pointer">
-      <div className=" relative w-full h-56 group ">
+      <div className=" relative w-full h-46 group ">
         <div
           className={`absolute inset-0 justify-center items-center bg-black bg-opacity-50 group-hover:flex ${
             activeSong?.name === song.name
@@ -46,7 +47,7 @@ const SongCard = ({ song, key, i, isPlaying, activeSong, data }) => {
       </div>
       <div className=" flex flex-col mt-4">
         <p className=" font-semibold text-lg text-white truncate">
-          <Link to={`/songs/${key}`}>{song.name}</Link>
+          <Link to={`/songs/${songId}`}>{song.name}</Link>
         </p>
         <p className=" text-sm text-gray-300 truncate">
           <Link to={artistId && `/artists/${artistId}`}>
