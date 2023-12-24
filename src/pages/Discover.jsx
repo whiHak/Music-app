@@ -3,16 +3,15 @@ import { genres } from "../assets/constants";
 import { useGetSearchQuery } from "../redux/services/spotify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { setCurrentSongs } from "../redux/features/playerSlice";
+import { selectGenreListId, setCurrentSongs } from "../redux/features/playerSlice";
 
 const Discover = () => {
   const dispatch = useDispatch();
-  const { isPlaying, activeSong, currentSongs } = useSelector(
+  const { isPlaying, activeSong, genreListId } = useSelector(
     (state) => state.player
   );
-  const [genre, setGenre] = useState("Pop");
 
-  const { data, isFetching, error } = useGetSearchQuery(genre);
+  const { data, isFetching, error } = useGetSearchQuery(genreListId || "POP");
   useEffect(() => {
     if (data && !isFetching && !error) {
       dispatch(setCurrentSongs(data)); // Assuming the data structure matches the hits
@@ -28,19 +27,17 @@ const Discover = () => {
     tracks: { items },
   } = data;
   // console.log(items);
-  const title = "Pop";
+  const title = genres.find(({value})=>value === genreListId)?.title;
 
   return (
     <div className="w-full flex flex-col h-full">
       <div className="w-full flex justify-between items-center sm:flex-row flex-col mt-4 mb-10">
         <h2 className="text-3xl font-bold text-white text-left">
-          Discover {title}
+          Discover {title || "Pop"}
         </h2>
         <select
-          onChange={(e) => {
-            setGenre(e.target.value);
-          }}
-          value={genre}
+          onChange={(e) => dispatch(selectGenreListId(e.target.value))}
+          value={genreListId ||"Pop"}
           className=" bg-black outline-none text-gray-300 text-sm sm:mt-0 mt-5 p-3 rounded-lg "
         >
           {genres?.map((item) => (
