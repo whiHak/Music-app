@@ -26,15 +26,20 @@ const TopCharts = ({
   handlePause,
   handlePlay,
 }) => {
+  console.log(song)
   return (
     <div className=" w-full flex flex-row items-center hover:bg-[#4c426e] py-2 p-4 rounded-lg  cursor-pointer mt-0">
       <div className="w-full flex flex-row items-center ">
         <img src={sources[1].url} alt="song avatar" className=" mr-4" />
         <div className=" flex flex-col truncate ">
-          <h3 className=" text-white truncate font-bold">{song.name}</h3>
-          <p className=" text-base text-gray-300">
-            {song.artists.items[0].profile.name}
-          </p>
+          <Link to={`/songs/${song?.id}`}>
+            <h3 className=" text-white truncate font-bold">{song.name}</h3>
+          </Link>
+          <Link to={`/artists/${song?.artists?.items[0]?.uri?.slice(15)}`}>
+            <p className=" text-base text-gray-300">
+              {song.artists.items[0].profile.name}
+            </p>
+          </Link>
         </div>
       </div>
       <PlayPause
@@ -126,7 +131,7 @@ const TopPlay = () => {
               className=" shadow-lg rounded-full animate-slideright"
             >
               <Link to={`/artist/${song.data?.artists?.items[0].uri?.slice(15)}`}>
-                <Artist artistsId = {song.data?.artists?.items[0].uri?.slice(15)}/>
+                <Artist artistsId = {song.data?.artists?.items[0].uri?.slice(15)} name=""/>
               </Link>
             </SwiperSlide>
           ))}

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-const DetailsHeader = ({songData}) => {
+const DetailsHeader = ({songData, artistsId}) => {
 
-  const artistsId = songData?.tracks[0]?.artists[0]?.id;
+  const artistId = songData?.tracks[0]?.artists[0]?.id;
   console.log(songData)
   return (
     <div className="relative w-full flex flex-col">
@@ -16,7 +16,7 @@ const DetailsHeader = ({songData}) => {
         <div className="ml-5">
           <p className="text-2xl font-bold text-white ">{songData?.tracks[0]?.name}</p>
           {songData && (
-            <Link to={`/artists/${artistsId}`}>
+            <Link to={`/artists/${artistId}`}>
               <p className="text-gray-300 text-[14px]">{songData?.tracks[0].artists[0]?.name}</p>
             </Link>
           )}
