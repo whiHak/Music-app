@@ -15,21 +15,21 @@ const SongDetails = () => {
 
   const { activeSong, isPlaying } = useSelector((state) => state.player);
   const { data, isFetching, error } = useGetLyricsQuery(songid);
-  const { data: songData } = useGetTrackQuery(songid);
-  const { data: relatedSongData, isFetching: relatedFetching } = useGetRelatedQuery(songid);
+  const { data: songData, isFetching:headerFetching } = useGetTrackQuery({songid});
+  const { data: relatedSongData, isFetching: relatedFetching } = useGetRelatedQuery({songid});
 // console.log(relatedSongData)
 
-  if (isFetching || relatedFetching) return <Loader />;
+  if (isFetching || headerFetching || relatedFetching) return <Loader />;
 
-  const artistsId = songData?.tracks[0]?.artists[0]?.id;
+  // const artistsId = songData?.tracks[0]?.artists[0]?.id;
 
   // const{lyrics:{lines}} = data
-  console.log(data);
+  console.log(songData);
 
   return (
     <div className=" flex flex-col mt-10">
       <div className=" flex flex-col">
-        <DetailsHeader songData={songData} />
+        <DetailsHeader songData={songData} artistsId="" />
       </div>
       <div className=" mt-10">
         <h2 className=" text-3xl text-white font-bold">Lyrics: </h2>
@@ -43,8 +43,7 @@ const SongDetails = () => {
       </div>
       <div className="mt-10">
         <RelatedSongs
-          data= {relatedSongData?.tracks}
-          artistsId={artistsId}
+          data= {relatedSongData?.tracks?.data}
           activeSong={activeSong}
           isPlaying={isPlaying}
         />
